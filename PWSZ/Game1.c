@@ -89,7 +89,7 @@ void enemytype1health(){
 }
 int fight1(int dificulty)
 {
-    int enemy=0,option;
+    int enemy=0,option,goaway,move;
     srand(time(0));
     enemytype1damage(dificulty);
     enemytype1health();
@@ -97,12 +97,32 @@ int fight1(int dificulty)
     {
         while(1)
         {
-            printf(" Walczysz z Szkieletem.\n Zdrowie Szkieleta : %f\n\n 1.Atak.\n 2.Atak magiczny.\n 3.Próba ucieczki. 4.Unik i atak.\n\n ",skeleton.health);
+            printf(" Walczysz z Szkieletem.\n Zdrowie Szkieleta : %f\n Twoje zdrowie : %f\n\n 1.Atak.\n 2.Atak magiczny.\n 3.Próba ucieczki. 4.Unik i atak.\n\n Wybierz opcje :  ",skeleton.health,player.health);
             scanf("%d",&option);
-            if(option==1){
-                if()
+            if(skeleton.health-player.damage>0){
+                if(option==1){
                 skeleton.health=skeleton.health-player.damage;
+                player.health=player.health-skeleton.damage;
+                }
+                else if(option==2){
+                skeleton.health=skeleton.health-player.magicDamage;
+                player.health=player.health-skeleton.damage;
+                }
+                else if(option==3){
+                   goaway=rand()%10;
+                   if(goaway==1||goaway==9)
+                   {
+                       return 2;
+                   }
+                   else player.health=player.health-skeleton.damage;
+                }
+                else if(option==4){
+                    move=rand()%100-player.dodgeChance;
+                }
+                
             }
+            else if(player.health-skeleton.damage<1){return 0;}
+            else return 1;
 
 
         }
@@ -161,5 +181,7 @@ void game(){
     stats(temp);
     viewstats(name);
     battle=fight1(temp);
+    if(battle==1){printf("\nWygrana!\n");}
+    else if(battle=0){printf("\nPorazka\n");}
     system ("PAUSE");
 }
